@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Direct Message</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>WhatsApp Direct Message</h1>
+            <p>Message without saving the number</p>
+        </div>
+        
+        <div class="form-container">
+            <div class="input-group">
+                <label for="countryCode">Country Code</label>
+                <input type="text" id="countryCode" placeholder="e.g., 1 for USA, 91 for India" value="+">
+                <div class="input-hint">Include the plus sign (+) at the beginning</div>
+                <div class="error" id="countryCodeError">Please enter a valid country code</div>
+            </div>
+            
+            <div class="input-group">
+                <label for="phoneNumber">Phone Number</label>
+                <input type="tel" id="phoneNumber" placeholder="Without country code or leading zeros">
+                <div class="input-hint">Enter only numbers, without spaces or special characters</div>
+                <div class="error" id="phoneNumberError">Please enter a valid phone number</div>
+            </div>
+            
+            <button id="generateBtn">
+                <i class="fab fa-whatsapp"></i> Generate WhatsApp Link
+            </button>
+            
+            <div class="result" id="result">
+                <p>Click the button below to open WhatsApp and start chatting</p>
+                <a href="#" id="whatsappLink" target="_blank">
+                    <i class="fab fa-whatsapp"></i> Open WhatsApp
+                </a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <a href="https://wa.me/+2348180402086" target="_blank">
+                <i class="fab fa-whatsapp"></i> Contact via WhatsApp
+            </a>
+            <a href="https://paystack.shop/pay/getcoffee" target="_blank">
+                <i class="fas fa-coffee"></i> Please, buy me a coffee
+            </a>
+            <div class="coffee-footer">
+                <p>This tool doesn't store any phone numbers or personal data</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const countryCodeInput = document.getElementById('countryCode');
+            const phoneNumberInput = document.getElementById('phoneNumber');
+            const generateBtn = document.getElementById('generateBtn');
+            const resultDiv = document.getElementById('result');
+            const whatsappLink = document.getElementById('whatsappLink');
+            const countryCodeError = document.getElementById('countryCodeError');
+            const phoneNumberError = document.getElementById('phoneNumberError');
+            
+            // Focus on country code input when page loads
+            countryCodeInput.focus();
+            
+            // Validate inputs and generate link
+            generateBtn.addEventListener('click', function() {
+                // Reset errors
+                countryCodeError.style.display = 'none';
+                phoneNumberError.style.display = 'none';
+                
+                let isValid = true;
+                
+                // Validate country code
+                const countryCode = countryCodeInput.value.trim();
+                if (!countryCode || !/^\+[0-9]{1,4}$/.test(countryCode)) {
+                    countryCodeError.style.display = 'block';
+                    isValid = false;
+                }
+                
+                // Validate phone number
+                const phoneNumber = phoneNumberInput.value.trim();
+                if (!phoneNumber || !/^[0-9]{4,14}$/.test(phoneNumber)) {
+                    phoneNumberError.style.display = 'block';
+                    isValid = false;
+                }
+                
+                if (isValid) {
+                    // Generate the WhatsApp link
+                    const fullNumber = countryCode + phoneNumber;
+                    const encodedMessage = ''; // You can pre-fill a message if desired
+                    const whatsappUrl = `https://wa.me/${fullNumber.replace('+', '')}?text=${encodedMessage}`;
+                    
+                    // Set the link and show result
+                    whatsappLink.href = whatsappUrl;
+                    resultDiv.style.display = 'block';
+                    
+                    // Optional: auto-open the WhatsApp link (comment out if not desired)
+                    // window.open(whatsappUrl, '_blank');
+                }
+            });
+            
+            // Allow Enter key to submit the form
+            phoneNumberInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    generateBtn.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
